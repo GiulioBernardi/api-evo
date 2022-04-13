@@ -1,6 +1,7 @@
 import { MaxLength, MinLength } from 'class-validator';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, IsNull, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Departamento } from './Departamento';
+import { Schema } from 'mongoose'
 
 
 @Entity()
@@ -16,9 +17,7 @@ export class Funcionario {
     nome: string;
 
     //COMO QUE GUARDA FOTO?
-    @Column({name: 'ds_foto'})
-    @MaxLength(1) //excluir isso depois e não deixar nenhuma validação
-    @MinLength(1) //excluir isso depois e não deixar nenhuma validação
+    @Column({name: 'ds_foto', nullable: true})
     foto: string;
 
     @Column({name: 'ds_rg'})
@@ -30,7 +29,7 @@ export class Funcionario {
     @Column({name:'departamentoId'})
     departamentoId: number
 
-    @ManyToOne(type => Departamento, departamento => departamento.funcionarios)
+    @ManyToOne(type => Departamento, departamento => departamento.funcionarios, {onDelete: 'CASCADE'})
     departamento:number
 
 }
