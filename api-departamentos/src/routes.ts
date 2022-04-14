@@ -15,16 +15,18 @@ routes.get('/departamentos', getDepartamentos)
 routes.post('/departamentos', saveDepartamento)
 routes.get('/departamentos/:id', getDepartamentoById)
 routes.put('/departamentos/:id', updateDepartamento)
-routes.delete('/departamentos/:id', deleteDepartamento)
+routes.put('/departamentos/status/:id', deleteDepartamento)
+
 
 routes.get('/funcionarios', getFuncionarios)
 routes.get('/funcionarios', saveFuncionarioteste)
 routes.post('/funcionarios/:id', saveFuncionario)
 routes.get('/funcionarios/departamento/:id', getFuncionarioByDepartamento)
-
 routes.put('/funcionarios/:id/upload-image', multer(multerConfig).single('foto'), uploadImage)
+routes.put('/funcionarios/status/:id', deleteFuncionario)
+
 routes.get('/funcionarios/:id/imagem', getImageByFuncionario)
 routes.put('/funcionarios/:id', updateFuncionario)
-routes.delete('/funcionarios/:id', deleteFuncionario)
+// routes.delete('/funcionarios/:id', deleteFuncionario) <- PARA TESTE
 
 export default routes
