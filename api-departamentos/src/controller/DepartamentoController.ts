@@ -4,7 +4,7 @@ import { getRepository } from 'typeorm';
 import { Departamento } from '../entity/Departamento';
 
 export const getDepartamentos = async(request:Request, response: Response) => {
-    const departamento = await getRepository(Departamento).find()
+    const departamento = await getRepository(Departamento).find({where: {ativo: true}})
     return response.json(departamento) 
 }
 
@@ -12,6 +12,7 @@ export const getDepartamentos = async(request:Request, response: Response) => {
 export const getDepartamentoById =async(request:Request, response: Response) => {
     const { id } = request.params
     const departamento = await getRepository(Departamento).findOne({where: {id: parseInt(request.params.id, )}})
+
     return response.json(departamento)
 }
 
@@ -45,14 +46,13 @@ export const updateDepartamento = async(request:Request, response:Response) => {
     return response.status(404).json({message: "Departamento não encontrado"})
 }
 
+// export const updateDeptoStatus =async (request:Request, response:Response) => {}
+
+
 export const deleteDepartamento = async(request:Request, response:Response) => {
-    const {id} = request.params
+    const departamento = await getRepository(Departamento)
 
-    const funcionario = await getRepository(Departamento).delete(id)
+    const res = await departamento.update(parseInt(request.params.id, 10), {ativo : false})
 
-    if(funcionario.affected === 1) {
-        const funcionario = await getRepository(Departamento).findOne({where: {id: parseInt(request.params.id, 10)}})
-        return response.json({message:"Departamento deltado"})
-    }
-    return response.status(404).json({message: "Departamento não encontrado"})
+    return response.status(200).json(res)
 }

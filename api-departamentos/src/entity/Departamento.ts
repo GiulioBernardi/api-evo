@@ -19,6 +19,9 @@ export class Departamento {
     @MinLength(3)
     sigla: string;
 
+    @Column({name: 'st_departamento', default: true})
+    ativo: boolean
+
     @OneToMany(type => Funcionario, funcionario => funcionario.departamento, {eager: true})
     funcionarios: Array<Funcionario>;
 

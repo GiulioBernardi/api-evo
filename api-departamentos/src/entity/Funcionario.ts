@@ -25,6 +25,9 @@ export class Funcionario {
     @MinLength(8)     
     rg: string;
 
+    @Column({name:'st_funcionario', default: true})
+    ativo: boolean
+
 
     @Column({name:'departamentoId'})
     departamentoId: number

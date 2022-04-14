@@ -1,7 +1,7 @@
 import { validate } from 'class-validator';
 import { Request, Response } from 'express';
 import multer = require('multer');
-import { CustomRepositoryNotFoundError, getRepository } from 'typeorm';
+import { getRepository } from 'typeorm';
 import { multerConfig } from '../config/multer';
 import { Funcionario } from '../entity/Funcionario';
 
@@ -34,8 +34,10 @@ export const getImageByFuncionario = async(request:Request, response: Response) 
 export const getFuncionarioByDepartamento = async(request:Request, response: Response) => {
     const funcionario = await getRepository(Funcionario).find({
         where:{
-            departamentoId: parseInt(request.params.id, 10)
+            departamentoId: parseInt(request.params.id, 10),
+            ativo: true
         },
+    
     })
     return response.json(funcionario)
 }
@@ -87,19 +89,14 @@ export const uploadImage = async (request: Request, response: Response) => {
     const funcionario = await getRepository(Funcionario)
     const {nome, rg, departamentoId} = request.body
 
-    // if(erros.length === 0){
-        const res = await funcionario.update(parseInt(request.params.id, 10), {foto : request.file.path})
-        return response.status(200).json(res)
+    
+    const res = await funcionario.update(parseInt(request.params.id, 10), {foto : request.file.path})
+    return response.status(200).json(res)
 }
 
 export const deleteFuncionario = async(request:Request, response:Response) => {
-    const {id} = request.params
+    const funcionario = await getRepository(Funcionario)
 
-    const funcionario = await getRepository(Funcionario).delete(id)
-
-    if(funcionario.affected === 1) {
-        const funcionario = await getRepository(Funcionario).findOne({where: {id: parseInt(request.params.id, 10)}})
-        return response.json({message:"Funcionario deltado"})
-    }
-    return response.status(404).json({message: "Funcionario não encontrado"})
+    const res = await funcionario.update(parseInt(request.params.id, 10), {ativo: false})
+    return response.status(200).json(res)
 }
